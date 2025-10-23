@@ -39,7 +39,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 This app requires a password to access. Set the password in Vercel (or locally) as an environment variable:
 
-- `VERCEL_PASSWORD` — the password users must enter to view the app.
+- `ACCESS_PSSSWD` — the password users must enter to view the app.
 
 Optional:
 
