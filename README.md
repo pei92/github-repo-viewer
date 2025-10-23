@@ -34,3 +34,15 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Configuration
+
+This app requires a password to access. Set the password in Vercel (or locally) as an environment variable:
+
+- `VERCEL_PASSWORD` — the password users must enter to view the app.
+
+Optional:
+
+- `GITHUB_TOKEN` — a personal access token to increase GitHub API rate limits. Not required but recommended for frequent use.
+
+When deploying to Vercel, add these env vars in your project settings.
