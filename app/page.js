@@ -1,11 +1,11 @@
-'use client'; // 这是一个客户端组件，因为它需要状态和事件处理
+'use client';
 
 import { useState } from 'react';
 import RepoItem from './components/RepoItem';
 import Pagination from './components/Pagination';
 
 export default function Home() {
-  // 状态管理
+  // ... 保持其他状态不变 ...
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState('');
@@ -18,26 +18,40 @@ export default function Home() {
   // 分页状态
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const resultsPerPage = 20; // 需求：默认20条
+  const resultsPerPage = 20;
 
   // 密码验证
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async (e) => { // 更改为 async
     e.preventDefault();
-    
-    // *** 变更点 ***
-    // 从环境变量中获取密码
-    const correctPassword = process.env.NEXT_PUBLIC_ACCESS_PSSSWD;
+    setAuthError(''); // 清除旧错误
 
-    if (password === correctPassword) {
-      setIsAuthenticated(true);
-      setAuthError('');
-    } else {
-      setAuthError('密码错误，请重试。');
+    try {
+      // *** 变更点 ***: 向新的服务器端 API 路由发送请求
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setIsAuthenticated(true);
+      } else {
+        // API 返回的错误信息
+        setAuthError(data.message || '登录失败，请检查网络或稍后重试。');
+      }
+    } catch (err) {
+      console.error('认证网络错误:', err);
+      setAuthError('网络错误，无法连接到服务器。');
     }
   };
 
-  // 搜索仓库
+  // ... 保持 handleSearch, onSearchSubmit, onPageChange 不变 ...
   const handleSearch = async (page = 1) => {
+    // ... (保持不变) ...
     if (!searchTerm) {
       setError('请输入搜索词。');
       setRepos([]);
@@ -46,7 +60,7 @@ export default function Home() {
 
     setLoading(true);
     setError(null);
-    setRepos([]); // 清空旧结果
+    setRepos([]);
 
     try {
       // 调用我们自己的 API 路由
@@ -75,7 +89,7 @@ export default function Home() {
   // 搜索表单提交
   const onSearchSubmit = (e) => {
     e.preventDefault();
-    handleSearch(1); // 始终从第一页开始新搜索
+    handleSearch(1);
   };
 
   // 分页更改
@@ -105,6 +119,7 @@ export default function Home() {
 
   // 渲染主应用界面
   return (
+    // ... (保持不变) ...
     <main>
       <h1>GitHub Release Viewer</h1>
       <form onSubmit={onSearchSubmit} className="search-form">
